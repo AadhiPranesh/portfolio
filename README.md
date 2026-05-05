@@ -1,58 +1,65 @@
-# Portfolio Website
+# Aadhi Pranesh SS - Portfolio
 
-This is a personal portfolio website built using Vite+React, Tailwind CSS, and Framer Motion to showcase my skills, projects, and experience.
+This is my personal portfolio website where I showcase my skills, projects, experience, and contact details.
 
-## Features
-- **Responsive Design** – Works on all screen sizes.
-- **Smooth Animations** – Powered by Framer Motion for interactive user experience.
-- **Dark Mode Support** – Stylish UI with light and dark theme toggling.
-- **Optimized Performance** – Efficient rendering and smooth navigation.
-- **SEO Friendly** – Optimized for better search engine visibility.
+## About Me
+I am a Computer Science student and aspiring Full Stack Developer from Tamil Nadu.
+I enjoy building practical, real-world applications and continuously improving my problem-solving and development skills.
+
+## What This Portfolio Includes
+- Home section with animated intro and social links
+- About Me section with profile and background
+- Skills section with core technologies
+- Experience section
+- Projects showcase with GitHub and live links
+- Contact form that opens email with pre-filled message
+- Responsive navigation for desktop and mobile
+- Custom cursor interaction for desktop users
 
 ## Tech Stack
-- **Frontend:** React.js
-- **Styling:** Tailwind CSS
-- **Animations:** Framer Motion
+- React 19
+- Vite 6
+- Tailwind CSS 3
+- Framer Motion
+- React Icons
+- React Type Animation
 
-## Installation & Setup
+## Getting Started
 
 1. Clone the repository:
    ```sh
-   git clone https://github.com/sathishk-dev/illustration-portfolio.git
+   git clone <your-repository-url>
    ```
-2. Navigate to the project directory:
+2. Go to the project folder:
    ```sh
-   cd illustration-portfolio
+   cd portfolio-main
    ```
 3. Install dependencies:
    ```sh
    npm install
    ```
-4. Start the development server:
+4. Start development server:
    ```sh
    npm run dev
    ```
-   The app will be available at `http://localhost:3000/`.
+5. Open in browser:
+   ```text
+   http://localhost:5173
+   ```
 
-## Demo
-Check out the live demo of the portfolio website: [Live Demo](https://sk-illustration-portfolio.netlify.app/)
+## Available Scripts
+- `npm run dev` - Start local development server
+- `npm run build` - Build for production
+- `npm run preview` - Preview production build
+- `npm run lint` - Run ESLint checks
 
-## Deployment
-To deploy the portfolio website, you can use platforms like:
-- **Vercel**
-- **Netlify**
-- **GitHub Pages** (with additional configurations)
-
-## How to Contribute
-If you’d like to contribute or improve this project, feel free to fork the repository and submit a pull request.
-
-## 🙌 Show Your Support
-If you like this project, please star it and share it with your friends!
+## Live Demo
+[/](/)
 
 ## Contact
-If you have any questions or suggestions, feel free to reach out via:
-- **Email:** ssaadhipranesh@gmail.com
-- **LinkedIn:** [@sathishk-dev](https://linkedin.com/in/sathishk-dev)
+- Email: ssaadhipranesh@gmail.com
+- LinkedIn: [S Saadhi Pranesh](https://www.linkedin.com/in/s-saadhi-pranesh-ssap2310/)
+- GitHub: [AadhiPranesh](https://github.com/AadhiPranesh/)
 
 ---
-Made with ❤️ by Aadhi Pranesh SS.
+Built by Aadhi Pranesh SS.
