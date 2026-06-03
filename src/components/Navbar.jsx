@@ -6,6 +6,7 @@ import { HiOutlineMenu, HiX } from "react-icons/hi";
 export default function Navbar() {
   const [hasShadow, setHasShadow] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
+  const [pendingScrollTarget, setPendingScrollTarget] = useState(null);
 
   useEffect(() => {
     const handleScroll = () => {
@@ -23,14 +24,72 @@ export default function Navbar() {
     };
   }, [isOpen]);
 
+  useEffect(() => {
+    if (isOpen || !pendingScrollTarget) {
+      return;
+    }
+
+    const scrollTimer = window.setTimeout(() => {
+      const section = document.getElementById(pendingScrollTarget);
+      if (section) {
+        const targetY = section.offsetTop - (window.innerWidth < 1024 ? 90 : 110);
+        const startY = window.scrollY;
+        const distance = targetY - startY;
+        const duration = 650;
+        const startTime = performance.now();
+
+        const easeInOutCubic = (progress) =>
+          progress < 0.5
+            ? 4 * progress * progress * progress
+            : 1 - Math.pow(-2 * progress + 2, 3) / 2;
+
+        const animateScroll = (now) => {
+          const elapsed = Math.min((now - startTime) / duration, 1);
+          window.scrollTo(0, startY + distance * easeInOutCubic(elapsed));
+
+          if (elapsed < 1) {
+            window.requestAnimationFrame(animateScroll);
+          }
+        };
+
+        window.requestAnimationFrame(animateScroll);
+      }
+      setPendingScrollTarget(null);
+    }, 150);
+
+    return () => window.clearTimeout(scrollTimer);
+  }, [isOpen, pendingScrollTarget]);
+
   const scrollToSection = (id) => {
     const section = document.getElementById(id);
     if (section) {
-      window.scrollTo({
-        top: section.offsetTop - (window.innerWidth < 1024 ? 90 : 110),
-        behavior: "smooth",
-      });
+      const targetY = section.offsetTop - (window.innerWidth < 1024 ? 90 : 110);
+      const startY = window.scrollY;
+      const distance = targetY - startY;
+      const duration = 650;
+      const startTime = performance.now();
+
+      const easeInOutCubic = (progress) =>
+        progress < 0.5
+          ? 4 * progress * progress * progress
+          : 1 - Math.pow(-2 * progress + 2, 3) / 2;
+
+      const animateScroll = (now) => {
+        const elapsed = Math.min((now - startTime) / duration, 1);
+        window.scrollTo(0, startY + distance * easeInOutCubic(elapsed));
+
+        if (elapsed < 1) {
+          window.requestAnimationFrame(animateScroll);
+        }
+      };
+
+      window.requestAnimationFrame(animateScroll);
     }
+    setIsOpen(false);
+  };
+
+  const handleMenuItemClick = (id) => {
+    setPendingScrollTarget(id);
     setIsOpen(false);
   };
 
@@ -82,8 +141,9 @@ export default function Navbar() {
         </motion.a>
 
         <motion.button
-          className="lg:hidden text-2xl p-1"
-          onClick={() => setIsOpen(!isOpen)}
+          type="button"
+          className="relative z-[60] lg:hidden text-2xl p-1"
+          onClick={() => setIsOpen((open) => !open)}
           whileHover={{ scale: 1.2 }}
           aria-label={isOpen ? "Close menu" : "Open menu"}
         >
@@ -94,44 +154,56 @@ export default function Navbar() {
       {/* Mobile Menu */}
       <AnimatePresence>
         {isOpen && (
-          <motion.div
-            initial={{ opacity: 0, y: -12 }}
-            animate={{ y: 0 }}
-            exit={{ opacity: 0, y: -12 }}
-            transition={{ duration: 0.25 }}
-            className="lg:hidden fixed top-[72px] right-0 h-[calc(100vh-72px)] w-full bg-white shadow"
-          >
-            <button
-              className="absolute top-5 right-5 text-2xl"
+          <motion.div className="lg:hidden fixed inset-x-0 top-[72px] bottom-0 z-50">
+            <motion.button
+              type="button"
+              className="absolute inset-0 h-full w-full bg-black/20"
+              initial={{ opacity: 0 }}
+              animate={{ opacity: 1 }}
+              exit={{ opacity: 0 }}
+              aria-label="Close menu backdrop"
               onClick={() => setIsOpen(false)}
-              aria-label="Close menu"
+            />
+            <motion.div
+              initial={{ opacity: 0, y: -12 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -12 }}
+              transition={{ duration: 0.25 }}
+              className="absolute inset-x-0 top-0 h-full w-full bg-white shadow-lg"
             >
-              <HiX />
-            </button>
-            <ul className="flex flex-col items-start px-8 pt-12 h-full gap-y-6 font-semibold text-lg">
-              {["about", "skills", "projects", "contact"].map((section) => (
-                <motion.li
-                  key={section}
-                  className="border-b border-black/20 pb-1"
+              <button
+                type="button"
+                className="absolute top-5 right-5 text-2xl"
+                onClick={() => setIsOpen(false)}
+                aria-label="Close menu"
+              >
+                <HiX />
+              </button>
+              <ul className="flex flex-col items-start px-8 pt-12 h-full gap-y-6 font-semibold text-lg">
+                {["about", "skills", "projects", "contact"].map((section) => (
+                  <motion.li
+                    key={section}
+                    className="border-b border-black/20 pb-1"
+                    whileHover={{ scale: 1.1 }}
+                  >
+                      <button type="button" onClick={() => handleMenuItemClick(section)}>
+                      {section.charAt(0).toUpperCase() + section.slice(1)}
+                    </button>
+                  </motion.li>
+                ))}
+                <motion.a
+                  href=""
+                  className="relative inline-block px-4 py-2 font-semibold group"
                   whileHover={{ scale: 1.1 }}
                 >
-                  <button onClick={() => scrollToSection(section)}>
-                    {section.charAt(0).toUpperCase() + section.slice(1)}
-                  </button>
-                </motion.li>
-              ))}
-              <motion.a
-                href=""
-                className="relative inline-block px-4 py-2 font-semibold group"
-                whileHover={{ scale: 1.1 }}
-              >
-                <span className="absolute inset-0 w-full h-full transition duration-200 ease-out transform translate-x-1 translate-y-1 bg-black group-hover:-translate-x-0 group-hover:-translate-y-0"></span>
-                <span className="absolute inset-0 w-full h-full bg-white border-2 border-black group-hover:bg-black"></span>
-                <span className="relative text-black group-hover:text-white flex items-center gap-x-3">
-                  Resume <TbDownload size={16} />
-                </span>
-              </motion.a>
-            </ul>
+                  <span className="absolute inset-0 w-full h-full transition duration-200 ease-out transform translate-x-1 translate-y-1 bg-black group-hover:-translate-x-0 group-hover:-translate-y-0"></span>
+                  <span className="absolute inset-0 w-full h-full bg-white border-2 border-black group-hover:bg-black"></span>
+                  <span className="relative text-black group-hover:text-white flex items-center gap-x-3">
+                    Resume <TbDownload size={16} />
+                  </span>
+                </motion.a>
+              </ul>
+            </motion.div>
           </motion.div>
         )}
       </AnimatePresence>

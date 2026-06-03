@@ -21,8 +21,8 @@ export default function CustomCursor() {
       setCursorSize(32); // Reset cursor size when leaving text
     };
 
-    // Select all text elements
-    const textElements = document.querySelectorAll("p, h1, h2, h3, h4, h5, h6");
+    // Keep the cursor effect on body text and controls, but avoid headings so it does not cover titles.
+    const textElements = document.querySelectorAll("p, a, button, li");
 
     textElements.forEach((el) => {
       el.addEventListener("mouseenter", handleMouseOverText);
